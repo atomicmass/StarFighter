@@ -16,5 +16,6 @@
 }
 
 -(void) spawn;
++(Enemy *) create;
 
 @end

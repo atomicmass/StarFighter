@@ -23,8 +23,15 @@
         NSMutableArray *anim = [[NSMutableArray alloc] init];
         [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"enemy1-1.png"]];
         [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"enemy1-2.png"]];
-        animation = [CCAnimation animationWithFrames:anim delay:animationDelay];
+//        animation = [CCAnimation animationWithFrames:anim delay:animationDelay];
+        animation = [CCAnimation animationWithSpriteFrames:anim delay:animationDelay];
     }
+    
+    return self;
+}
+
++(Enemy *)create {
+    return [[EnemyOne alloc] init];
 }
 
 @end

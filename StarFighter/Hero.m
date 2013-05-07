@@ -7,13 +7,28 @@
 //
 
 #import "Hero.h"
+#import "cocos2d.h"
 
+@implementation Hero {
+    CCLayer *gameLayer;
+    CCArray *lasers;
+    CGSize windowSize;
+    int width, height;
+    float timeToTraverseWholeScreenY, animationDelay, correctionTime, laserTime;
+    int correctionDistance;
+    int homeX, homeY;
+    double gyroSensitivity;
+    double maxGyro;
+    int maxY, minY;
+    BOOL isTurning, isTurnedUp, isTurnedDown;
+    float fireOneCount;
+    float fireOneCountLimit;
+}
 
-@implementation Hero
 
 @synthesize health;
 
-- (id)init
+- (id)initwithLayer:(CCLayer *)newGameLayer
 {
     self = [super init];
     if (self) {
@@ -21,231 +36,243 @@
         width = height = (64.0f * 0.75f);
         windowSize = [[CCDirector sharedDirector] winSize];
         
-        timeToTraverseWholeScreenY = 1.5f;
-        timeToTraverseWholeScreenX = 1.0f;
+        timeToTraverseWholeScreenY = 1.0f;
         animationDelay = 1.0f/24.0f;
         correctionDistance = 10;
         correctionTime = 0.25f;
-        baseY = height/2 + 30;
-        health = 100;
+        laserTime = 0.5f;
         
-        self.position = ccp(windowSize.width / 2, baseY);
-//        delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-  //      AppDelegate *delegate;
+        health = 100;
+        gyroSensitivity = 0.15;
+        maxGyro = 0.5;
+        
+        maxY = windowSize.height - height/2;
+        minY = height/2;
+        
+        homeY = windowSize.height / 2;
+        homeX = width/2 + 40;
+        
+        self.position = ccp(homeX, homeY);
+        
+        isTurning = isTurnedUp = isTurnedDown = NO;
+        
+        fireOneCount = 0;
+        fireOneCountLimit = 0.1;
+        
+        gameLayer = newGameLayer;
+        lasers = [[CCArray alloc] init];
+        for (int i = 0; i <= 20; i++)
+        {
+            CCSprite *s = [[CCSprite node] initWithSpriteFrameName:@"laser.png"];
+            [lasers addObject:s];
+            s.position = ccp(windowSize.width + 20, -20);
+            [gameLayer addChild:s];
+        }
+        
         [self waggle];
     }
     
     return self;
 }
 
--(CCAnimation *)getTurnLeft
+-(void) waggle
+{
+    id turnDown = [CCAnimate actionWithAnimation:[self getTurnDown]];
+    id turnUp = [CCAnimate actionWithAnimation:[self getTurnUp]];
+    id correctDown = [CCAnimate actionWithAnimation:[self getCorrectDown]];
+    id correctUp = [CCAnimate actionWithAnimation:[self getCorrectUp]];
+    [self runAction:[CCSequence actions:
+                     turnUp,
+                     correctUp,
+                     turnDown,
+                     correctDown,
+                     nil]];
+}
+
+-(CCAnimation *)getTurnUp
 {
     NSMutableArray *anim = [[NSMutableArray alloc] init];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 4]]];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 3]]];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 2]]];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 1]]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter4.png"]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter3.png"]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter2.png"]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter1.png"]];
     CCAnimation *a = [CCAnimation animationWithFrames:anim delay:animationDelay];
     return a;
 }
 
--(CCAnimation *)getCorrectLeft
+-(CCAnimation *)getCorrectUp
 {
     NSMutableArray *anim = [[NSMutableArray alloc] init];
     
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 1]]];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 2]]];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 3]]];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 4]]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter1.png"]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter2.png"]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter3.png"]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter4.png"]];
     
     CCAnimation *a = [CCAnimation animationWithFrames:anim delay:animationDelay];
     return a;
 }
 
--(CCAnimation *)getTurnRight
+-(CCAnimation *)getTurnDown
 {
     NSMutableArray *anim = [[NSMutableArray alloc] init];
     
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 4]]];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 5]]];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 6]]];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 7]]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter4.png"]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter5.png"]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter6.png"]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter7.png"]];
     
     CCAnimation *a = [CCAnimation animationWithFrames:anim delay:animationDelay];
     return a;
 }
 
--(CCAnimation *)getCorrectRight
+-(CCAnimation *)getCorrectDown
 {
     NSMutableArray *anim = [[NSMutableArray alloc] init];
     
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 7]]];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 6]]];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 5]]];
-    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"fighter%i.png", 4]]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter7.png"]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter6.png"]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter5.png"]];
+    [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter4.png"]];
     
     CCAnimation *a = [CCAnimation animationWithFrames:anim delay:1.0f/24.0f];
     return a;
 }
 
--(void) waggle
-{
-    [self runAction:[CCSequence actions:
-                     [CCAnimate actionWithAnimation:[self getTurnLeft]],
-                     [CCAnimate actionWithAnimation:[self getCorrectLeft]],
-                     [CCAnimate actionWithAnimation:[self getTurnRight]],
-                     [CCAnimate actionWithAnimation:[self getCorrectRight]],
-                     nil]];
-    
-    isTurnedLeft = isTurnedRight = isForward = isBackward = NO;
+-(void) beginTurn {
+    isTurning = YES;
+    isTurnedUp = isTurnedDown = NO;
 }
 
--(void) turnRight
-{
-    if(isTurnedRight) {
+-(void) endTurnUp {
+    isTurning = NO;
+    isTurnedUp = YES;
+    isTurnedDown = NO;
+}
+
+-(void) endTurnDown {
+    isTurning = NO;
+    isTurnedUp = NO;
+    isTurnedDown = YES;
+}
+
+-(void) endCorrect {
+    isTurning = NO;
+    isTurnedDown = NO;
+    isTurnedUp = NO;
+}
+
+-(void) turnDown {
+    if(isTurnedDown) {
         return;
     }
-
-    [self stopActionByTag:3];
-    [self stopActionByTag:1];
-    CCAction *a = [CCMoveBy actionWithDuration:[self getTimeToTraverseRight] position:ccp(windowSize.width - self.position.x - width/2, 0)];
-    a.tag = 1;
-    [self runAction: a];
     
-    if(isTurnedRight)
-        return;
+    id anim = [CCAnimate actionWithAnimation:[self getTurnDown]];
+    id t1 = [CCCallFunc actionWithTarget:self selector:@selector(beginTurn)];
+    id t2 = [CCCallFunc actionWithTarget:self selector:@selector(endTurnDown)];
+    CCAction *a = [CCSequence actions: t1, anim, t2, nil];
+    a.tag = 10;
+    [self stopActionByTag:10];
+    [self runAction:a];
     
-    if(isTurnedLeft)
-    {
-        [self runAction:[CCSequence actions:
-                         [CCAnimate actionWithAnimation:[self getCorrectLeft]],
-                         [CCAnimate actionWithAnimation:[self getTurnRight]],
-                         nil]];
-    }
-    else
-    {
-        [self runAction: [CCAnimate actionWithAnimation:[self getTurnRight]]];
-    }
-    
-    isTurnedRight = !(isTurnedLeft = NO);
+    float time = ((self.position.y - minY) / windowSize.height) * timeToTraverseWholeScreenY;
+    CCAction *m = [CCMoveTo actionWithDuration:time position:ccp(homeX, minY)];
+    m.tag = 10;
+    [self runAction:m];
 }
 
--(void) turnLeft
-{
-    if(isTurnedLeft) {
+-(void) turnUp {
+    if(isTurnedUp) {
         return;
     }
-
-    [self stopActionByTag:3];
-    [self stopActionByTag:1];
-    CCAction *a = [CCMoveBy actionWithDuration:[self getTimeToTraverseLeft] position:ccp(0 - (self.position.x - width/2), 0)];
-    a.tag = 1;
-    [self runAction: a];
     
-    if(isTurnedLeft)
+    id anim = [CCAnimate actionWithAnimation:[self getTurnUp]];
+    id t1 = [CCCallFunc actionWithTarget:self selector:@selector(beginTurn)];
+    id t2 = [CCCallFunc actionWithTarget:self selector:@selector(endTurnUp)];
+    CCAction *a = [CCSequence actions: t1, anim, t2, nil];
+    a.tag = 10;
+    [self stopActionByTag:10];
+    [self runAction:a];
+    
+    float time = ((maxY - self.position.y) / windowSize.height) * timeToTraverseWholeScreenY;
+    CCAction *m = [CCMoveTo actionWithDuration:time position:ccp(homeX, maxY)];
+    m.tag = 10;
+    [self runAction:m];
+}
+
+-(CCSprite *)getFreeLaser {
+    for (CCSprite *s in lasers) {
+        if(s.position.x == windowSize.width + 20) {
+            return s;
+        }
+    }
+    return nil;
+}
+
+-(void) fireOne:(float)time {
+    fireOneCount = fireOneCount - time;
+    if(fireOneCount > 0) {
         return;
- 
-    if(isTurnedRight)
-    {
-        [self runAction:[CCSequence actions:
-                         [CCAnimate actionWithAnimation:[self getCorrectRight]],
-                         [CCAnimate actionWithAnimation:[self getTurnLeft]],
-                         nil]];
-    }
-    else
-    {
-        [self runAction: [CCAnimate actionWithAnimation:[self getTurnLeft]]];
     }
     
-    isTurnedLeft = !(isTurnedRight = NO);
-}
-
--(void) correct
-{
-    [self stopActionByTag:1];
-    [self stopActionByTag:2];
-    //[self stopActionByTag:3];
-    if(isTurnedLeft)
-    {
-        int x = (self.position.x - correctionDistance - width/2 < 0) ? 0 : 0 - correctionDistance;
-        CCAction *a = [CCMoveBy actionWithDuration:correctionTime position:ccp(x, 0)];
-        a.tag = 3;
-        [self runAction: a];
-        [self runAction: [CCAnimate actionWithAnimation:[self getCorrectLeft]]];
-    }
-    if(isTurnedRight)
-    {
-        int x = (self.position.x + correctionDistance + width/2 > windowSize.width) ? 0 : correctionDistance;
-        CCAction *a = [CCMoveBy actionWithDuration:correctionTime position:ccp(x, 0)];
-        a.tag = 3;
-        [self runAction: a];
-        [self runAction: [CCAnimate actionWithAnimation:[self getCorrectRight]]];
+    fireOneCount = fireOneCountLimit;
+    int endX = windowSize.width + 20 - self.position.x;
+    
+    CCSprite *l1 = [self getFreeLaser];
+    if(l1 != nil) {
+        l1.position = ccp(self.position.x, self.position.y + 10);
+        [l1 runAction:[CCMoveBy actionWithDuration:laserTime position:ccp(endX, 0)]];
     }
     
-    if(isBackward)
-    {
-        int y = (self.position.y - correctionDistance <= baseY) ? 0 - (self.position.y - baseY) : 0 - correctionDistance;
-        CCAction *a = [CCMoveBy actionWithDuration:correctionTime position:ccp(0, y)];
-        a.tag = 3;
-        [self runAction: a];
+    CCSprite *l2 = [self getFreeLaser];
+    if(l2 != nil) {
+        l2.position = ccp(self.position.x, self.position.y - 10);
+        [l2 runAction:[CCMoveBy actionWithDuration:laserTime position:ccp(endX, 0)]];
     }
-    if(isForward)
-    {
-        int y = (self.position.y + correctionDistance > windowSize.height - height*2) ? windowSize.height - height*2 - self.position.y : correctionDistance;
-        CCAction *a = [CCMoveBy actionWithDuration:correctionTime position:ccp(0, y)];
-        a.tag = 3;
-        [self runAction: a];
+}
+
+-(void) correct {
+    id anim = nil;
+    
+    if(isTurnedDown) {
+        anim = [CCAnimate actionWithAnimation:[self getCorrectDown]];
     }
- 
-    isTurnedRight = isTurnedLeft = isForward = isBackward = NO;
+    
+    if(isTurnedUp) {
+        anim = [CCAnimate actionWithAnimation:[self getCorrectUp]];
+    }
+    
+    if(anim == nil) {
+        return;
+    }
+    
+    id t1 = [CCCallFunc actionWithTarget:self selector:@selector(beginTurn)];
+    id t2 = [CCCallFunc actionWithTarget:self selector:@selector(endCorrect)];
+    CCAction *a = [CCSequence actions: t1, anim, t2, nil];
+    a.tag = 10;
+    [self stopActionByTag:10];
+    [self runAction:a];
 }
 
--(void) forward
-{
-    [self stopActionByTag:3];
-    [self stopActionByTag:2];
-    CCAction *a = [CCMoveBy actionWithDuration:[self getTimeToTraverseForward] position:ccp(0, windowSize.height - height*2 - self.position.y)];
-    a.tag = 2;
-    [self runAction: a];
-    isForward = !(isBackward = NO);
-}
-
--(void) backward
-{
-    [self stopActionByTag:3];
-    [self stopActionByTag:2];
-    CCAction *a = [CCMoveBy actionWithDuration:[self getTimeToTraverseBackward] position:ccp(0, 0 - (self.position.y - baseY))];
-    a.tag = 2;
-    [self runAction: a];
-    isBackward = !(isForward = NO);
-}
-
--(void) frameTick
-{
-}
-
--(float) getTimeToTraverseRight
-{
-    int distance = windowSize.width - self.position.x;
-    return timeToTraverseWholeScreenX * (distance/windowSize.width);
-}
-
--(float) getTimeToTraverseLeft
-{
-    int distance = self.position.x;
-    return timeToTraverseWholeScreenX * (distance/windowSize.width);
-}
-
--(float) getTimeToTraverseForward
-{
-    int distance = windowSize.height - height*2 - self.position.y;
-    return timeToTraverseWholeScreenX * (distance/windowSize.height);
-}
-
--(float) getTimeToTraverseBackward
-{
-    int distance = self.position.y - baseY;
-    return timeToTraverseWholeScreenY * (distance/windowSize.height);
+-(void) turn:(double)degree {
+    if(isTurning) {
+        return;
+    }
+    
+    if(degree >= 0 - gyroSensitivity && degree <= gyroSensitivity) {
+        [self correct];
+        return;
+    }
+    
+    if(degree > 0) {
+        [self turnDown];
+        return;
+    }
+    
+    if(degree < 0) {
+        [self turnUp];
+        return;
+    }
 }
 
 @end

@@ -30,6 +30,8 @@
         float _lastChangeIntervalTime;
 
     }
+    
+    return self;
 }
 
 -(void)tickWithTime:(float)timeElapsed {

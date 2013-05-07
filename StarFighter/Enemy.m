@@ -14,4 +14,8 @@
     
 }
 
++(Enemy *)create {
+    return [[Enemy alloc] init];
+}
+
 @end

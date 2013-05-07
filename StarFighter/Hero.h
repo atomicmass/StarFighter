@@ -9,31 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
 
-@interface Hero : CCSprite {
-    BOOL *isTurnedLeft, *isTurnedRight, *isForward, *isBackward;
-    CGSize windowSize;
-    int width, height;
-    float timeToTraverseWholeScreenY, timeToTraverseWholeScreenX, animationDelay, correctionTime;
-    int correctionDistance;
-    int baseY;
-}
+@interface Hero : CCSprite
 
 @property int health;
 
--(CCAnimation *)getTurnLeft;
--(CCAnimation *)getCorrectLeft;
--(CCAnimation *)getTurnRight;
--(CCAnimation *)getCorrectRight;
--(void) waggle;
--(void) turnLeft;
--(void) turnRight;
--(void) correct;
--(void) frameTick;
--(float) getTimeToTraverseLeft;
--(float) getTimeToTraverseRight;
--(float) getTimeToTraverseForward;
--(float) getTimeToTraverseBackward;
--(void) forward;
--(void) backward;
+-(void) turn:(double) degree;
+-(void) fireOne:(float) time;
+-(id)initwithLayer:(CCLayer *)newGameLayer;
 
 @end

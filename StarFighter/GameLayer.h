@@ -12,17 +12,7 @@
 #import "Hero.h"
 
 @interface GameLayer : CCLayer {
-    Hero *hero;
-    CGSize windowSize;
-    float timeTillStar, timeElapsedSinceLastStar;
-    float timeTillEnemy, timeElapsedSinceEnemy;
-    CCArray *stars;
-    int backgroundTime;
-    CMMotionManager *motionManager;
-    NSOperationQueue *operationQueue;
-    CMAttitude *referenceAttitude;
-    CCLabelTTF *label;
-    double gyroSensitivity;
+    
 }
 
 +(CCScene *) scene;

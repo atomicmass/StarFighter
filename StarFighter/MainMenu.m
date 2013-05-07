@@ -35,7 +35,6 @@
 
 -(void) doSomething:(CCMenuItem  *) menuItem
 {
-    CCLOG(@"doSomething");
     [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:0.25f scene:[GameLayer scene]]];
 }
 

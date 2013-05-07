@@ -9,7 +9,20 @@
 #import "GameLayer.h"
 
 @implementation GameLayer {
-    
+    Hero *hero;
+    CGSize windowSize;
+    float timeTillStar, timeElapsedSinceLastStar;
+    float timeTillEnemy, timeElapsedSinceEnemy;
+    float totalTime;
+    CCArray *stars;
+    int backgroundTime;
+    CMMotionManager *motionManager;
+    NSOperationQueue *operationQueue;
+    float lastRoll;
+    float referenceRoll;
+    CCLabelTTF *label;
+    int destinationX;
+    BOOL *fingerDown;
 }
 
 // Helper class method that creates a Scene with the HelloWorldLayer as the only child.
@@ -35,14 +48,13 @@
 	// Apple recommends to re-assign "self" with the "super's" return value
 	if( (self=[super init]) ) {
         
-        gyroSensitivity = 0.50;
-        
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"fightersprite.plist"];
         windowSize = [[CCDirector sharedDirector] winSize];
 
         timeTillStar = 0.001;
         timeElapsedSinceLastStar = 0;
         backgroundTime = 70;
+        totalTime = 0;
         
         timeTillEnemy = 0.05;
         timeElapsedSinceEnemy = 0;
@@ -66,13 +78,13 @@
         [self addChild:bg1 z:-1];
         [self addChild:bg2 z:-1];
         
-        bg2.position = ccp(0, 568);
+        bg2.position = ccp(568, 0);
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGBA4444];
         
-        [bg1 runAction: [CCMoveTo actionWithDuration:backgroundTime position:ccp(0, -568)]];
-        [bg2 runAction: [CCMoveTo actionWithDuration:backgroundTime*2 position:ccp(0, -568)]];
+        [bg1 runAction: [CCMoveTo actionWithDuration:backgroundTime position:ccp(-568, 0)]];
+        [bg2 runAction: [CCMoveTo actionWithDuration:backgroundTime*2 position:ccp(-568, 0)]];
         
-        hero = [Hero node];
+        hero = [[Hero alloc] initwithLayer:self];
         [self addChild:hero z:100];
         
         for (int i=0, j=0; i<=hero.health; i+=5, j++) {
@@ -91,10 +103,13 @@
         [self addChild: label];
         
         motionManager = [[CMMotionManager alloc] init];
-        [motionManager startDeviceMotionUpdates];
-        CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
-        CMAttitude *attitude = deviceMotion.attitude;
-        referenceAttitude = [attitude retain];
+        if ([motionManager isDeviceMotionAvailable]) {
+            // to avoid using more CPU than necessary we use `CMAttitudeReferenceFrameXArbitraryZVertical`
+            [motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryZVertical];
+        }
+        
+        referenceRoll = -100;
+        lastRoll = -100;
 	}
 	return self;
 }
@@ -103,19 +118,37 @@
     CMDeviceMotion *motion = motionManager.deviceMotion;
     attitude = motion.attitude;
     
-    double effectiveYaw = attitude.yaw - referenceAttitude.yaw;
-    double effectivePitch = attitude.pitch - referenceAttitude.pitch;
-    //[label setString:[NSString stringWithFormat:@"%.2f  %.2f", attitude.yaw, effectiveYaw]];
+    if(attitude == nil) {
+        return;
+    }
     
-    if(effectiveYaw > gyroSensitivity) {
-        [hero turnLeft];
+    //CCLOG(@"attitude: %.2f", attitude.roll);
+    if(lastRoll == -100) {
+        lastRoll = attitude.roll;
     }
-    else if(effectiveYaw < 0 - gyroSensitivity) {
-        [hero turnRight];
+    
+    static float q = 0.1;   // process noise
+    static float r = 0.1;   // sensor noise
+    static float p = 0.1;   // estimated error
+    static float k = 0.5;   // kalman filter gain
+    
+    float x = lastRoll;
+    p = p + q;
+    k = p / (p + r);
+    x = x + k*(attitude.roll - x);
+    p = (1 - k)*p;
+    lastRoll = x;
+    
+    //CCLOG(@"x: %.2f", x);
+    
+    if(referenceRoll == -100) {
+        referenceRoll = x;
     }
-    else {
-        [hero correct];
-    }
+    
+    float roll = x - referenceRoll;
+    
+    //CCLOG(@"roll: %.2f", roll);
+    [hero turn:roll];
 }
 
 -(void) registerWithTouchDispatcher
@@ -126,15 +159,21 @@
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
    // CGPoint location = [self convertTouchToNodeSpace: touch];
 
+    fingerDown = YES;
     return YES;
 }
 
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
+    fingerDown = NO;
 }
 
 -(void) nextFrame:(ccTime)dt
 {
+    totalTime += dt;
     [self readGyro];
+    if(fingerDown) {
+        [hero fireOne:dt];
+    }
     
     timeElapsedSinceEnemy += dt;
     if(timeElapsedSinceEnemy > timeTillEnemy) {
@@ -156,10 +195,10 @@
         {
             timeElapsedSinceLastStar = 0;
             timeTillStar = (arc4random() % 10) / 100.0;
-            s.position = ccp(((int)arc4random() % (int)(windowSize.width - 40)) + 20, windowSize.height + 20);
+            s.position = ccp(windowSize.width + 20, ((int)arc4random() % (int)(windowSize.height - 40)) + 20);
             float t = (arc4random() % 200)/100.0 + 0.5;
             s.scale = (arc4random() % 90)/90.0 + 0.1;
-            [s runAction: [CCMoveBy actionWithDuration:t position:ccp(0, 0 - windowSize.height - 40)]];
+            [s runAction: [CCMoveBy actionWithDuration:t position:ccp(0 - windowSize.width - 40, 0)]];
         }
     }
 }
