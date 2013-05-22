@@ -149,14 +149,15 @@
 		144433C6172E47CB00CB1D23 /* mysecondbutton_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 144433BE172E47CA00CB1D23 /* mysecondbutton_selected.png */; };
 		144433C7172E47CB00CB1D23 /* mysecondbutton-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 144433BF172E47CB00CB1D23 /* mysecondbutton-hd.png */; };
 		144433C8172E47CB00CB1D23 /* mysecondbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 144433C0172E47CB00CB1D23 /* mysecondbutton.png */; };
-		144433CB173050F500CB1D23 /* fightersprite-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = 144433C9173050F500CB1D23 /* fightersprite-hd.plist */; };
-		144433CC173050F500CB1D23 /* fightersprite-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 144433CA173050F500CB1D23 /* fightersprite-hd.png */; };
 		1459CD5E16FC3E0600988B65 /* MainMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 1459CD5D16FC3E0600988B65 /* MainMenu.m */; };
 		1459CD6916FC3F5500988B65 /* GameLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1459CD6816FC3F5500988B65 /* GameLayer.m */; };
 		1459CD7816FC6DEC00988B65 /* Hero.m in Sources */ = {isa = PBXBuildFile; fileRef = 1459CD7716FC6DEC00988B65 /* Hero.m */; };
+		147C9175173C1FAF00B67247 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 147C9174173C1FAF00B67247 /* Default-568h@2x.png */; };
+		147C9178173C2BF200B67247 /* Sprite.m in Sources */ = {isa = PBXBuildFile; fileRef = 147C9177173C2BF200B67247 /* Sprite.m */; };
+		147C917B173CFEF900B67247 /* fightersprite-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = 147C9179173CFEF900B67247 /* fightersprite-hd.plist */; };
+		147C917C173CFEF900B67247 /* fightersprite-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 147C917A173CFEF900B67247 /* fightersprite-hd.png */; };
 		14D077B11729578C00E7479D /* Enemy.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D077B01729578C00E7479D /* Enemy.m */; };
 		14D077B4172957AB00E7479D /* EnemyOne.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D077B3172957AB00E7479D /* EnemyOne.m */; };
-		14D077B71729A41500E7479D /* EnemyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D077B61729A41500E7479D /* EnemyController.m */; };
 		14F3A70317285C0600B9AD67 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F3A70217285C0600B9AD67 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
@@ -443,20 +444,21 @@
 		144433BE172E47CA00CB1D23 /* mysecondbutton_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mysecondbutton_selected.png; sourceTree = "<group>"; };
 		144433BF172E47CB00CB1D23 /* mysecondbutton-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mysecondbutton-hd.png"; sourceTree = "<group>"; };
 		144433C0172E47CB00CB1D23 /* mysecondbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mysecondbutton.png; sourceTree = "<group>"; };
-		144433C9173050F500CB1D23 /* fightersprite-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "fightersprite-hd.plist"; sourceTree = "<group>"; };
-		144433CA173050F500CB1D23 /* fightersprite-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fightersprite-hd.png"; sourceTree = "<group>"; };
 		1459CD5C16FC3E0600988B65 /* MainMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenu.h; sourceTree = "<group>"; };
 		1459CD5D16FC3E0600988B65 /* MainMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenu.m; sourceTree = "<group>"; };
 		1459CD6716FC3F5500988B65 /* GameLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameLayer.h; sourceTree = "<group>"; };
 		1459CD6816FC3F5500988B65 /* GameLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameLayer.m; sourceTree = "<group>"; };
 		1459CD7616FC6DEC00988B65 /* Hero.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hero.h; sourceTree = "<group>"; };
 		1459CD7716FC6DEC00988B65 /* Hero.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hero.m; sourceTree = "<group>"; };
+		147C9174173C1FAF00B67247 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		147C9176173C2BF100B67247 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
+		147C9177173C2BF200B67247 /* Sprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sprite.m; sourceTree = "<group>"; };
+		147C9179173CFEF900B67247 /* fightersprite-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "fightersprite-hd.plist"; sourceTree = "<group>"; };
+		147C917A173CFEF900B67247 /* fightersprite-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fightersprite-hd.png"; sourceTree = "<group>"; };
 		14D077AF1729578C00E7479D /* Enemy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enemy.h; sourceTree = "<group>"; };
 		14D077B01729578C00E7479D /* Enemy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Enemy.m; sourceTree = "<group>"; };
 		14D077B2172957AB00E7479D /* EnemyOne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemyOne.h; sourceTree = "<group>"; };
 		14D077B3172957AB00E7479D /* EnemyOne.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemyOne.m; sourceTree = "<group>"; };
-		14D077B51729A41500E7479D /* EnemyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemyController.h; sourceTree = "<group>"; };
-		14D077B61729A41500E7479D /* EnemyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemyController.m; sourceTree = "<group>"; };
 		14F3A70217285C0600B9AD67 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		14F3A70417285C4A00B9AD67 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -485,6 +487,7 @@
 		1421E62C16F84C17005ED3F0 = {
 			isa = PBXGroup;
 			children = (
+				147C9174173C1FAF00B67247 /* Default-568h@2x.png */,
 				1421E64A16F84C17005ED3F0 /* StarFighter */,
 				1421E63716F84C17005ED3F0 /* Frameworks */,
 				1421E63616F84C17005ED3F0 /* Products */,
@@ -541,8 +544,8 @@
 		1421E64B16F84C17005ED3F0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				144433C9173050F500CB1D23 /* fightersprite-hd.plist */,
-				144433CA173050F500CB1D23 /* fightersprite-hd.png */,
+				147C9179173CFEF900B67247 /* fightersprite-hd.plist */,
+				147C917A173CFEF900B67247 /* fightersprite-hd.png */,
 				144433B9172E47CA00CB1D23 /* myfirstbutton_selected-hd.png */,
 				144433BA172E47CA00CB1D23 /* myfirstbutton_selected.png */,
 				144433BB172E47CA00CB1D23 /* myfirstbutton-hd.png */,
@@ -935,6 +938,8 @@
 				14D077B3172957AB00E7479D /* EnemyOne.m */,
 				1431A5C91738D43A004809DF /* EnemyFactory.h */,
 				1431A5CA1738D43A004809DF /* EnemyFactory.m */,
+				147C9176173C2BF100B67247 /* Sprite.h */,
+				147C9177173C2BF200B67247 /* Sprite.m */,
 			);
 			name = Enemies;
 			sourceTree = "<group>";
@@ -946,8 +951,6 @@
 				1431A5C117383123004809DF /* Levels */,
 				1459CD7616FC6DEC00988B65 /* Hero.h */,
 				1459CD7716FC6DEC00988B65 /* Hero.m */,
-				14D077B51729A41500E7479D /* EnemyController.h */,
-				14D077B61729A41500E7479D /* EnemyController.m */,
 				1431A5BE17382545004809DF /* EnemyGeneration.h */,
 				1431A5BF17382545004809DF /* EnemyGeneration.m */,
 			);
@@ -1029,8 +1032,9 @@
 				144433C6172E47CB00CB1D23 /* mysecondbutton_selected.png in Resources */,
 				144433C7172E47CB00CB1D23 /* mysecondbutton-hd.png in Resources */,
 				144433C8172E47CB00CB1D23 /* mysecondbutton.png in Resources */,
-				144433CB173050F500CB1D23 /* fightersprite-hd.plist in Resources */,
-				144433CC173050F500CB1D23 /* fightersprite-hd.png in Resources */,
+				147C9175173C1FAF00B67247 /* Default-568h@2x.png in Resources */,
+				147C917B173CFEF900B67247 /* fightersprite-hd.plist in Resources */,
+				147C917C173CFEF900B67247 /* fightersprite-hd.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1150,11 +1154,11 @@
 				1459CD7816FC6DEC00988B65 /* Hero.m in Sources */,
 				14D077B11729578C00E7479D /* Enemy.m in Sources */,
 				14D077B4172957AB00E7479D /* EnemyOne.m in Sources */,
-				14D077B71729A41500E7479D /* EnemyController.m in Sources */,
 				1431A5BD17378330004809DF /* Level.m in Sources */,
 				1431A5C017382545004809DF /* EnemyGeneration.m in Sources */,
 				1431A5C417383136004809DF /* LevelOne.m in Sources */,
 				1431A5CB1738D43A004809DF /* EnemyFactory.m in Sources */,
+				147C9178173C2BF200B67247 /* Sprite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

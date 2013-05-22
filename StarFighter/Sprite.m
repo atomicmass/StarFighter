@@ -10,4 +10,12 @@
 
 @implementation Sprite
 
+-(float) width {
+    return self.contentSize.width * self.scaleX;
+}
+
+-(float) height {
+    return self.contentSize.height * self.scaleY;
+}
+
 @end

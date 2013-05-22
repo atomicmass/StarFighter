@@ -8,13 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
+#import "Sprite.h"
 
-@interface Hero : CCSprite
+@interface Hero : Sprite
 
 @property int health;
 
 -(void) turn:(double) degree;
 -(void) fireOne:(float) time;
--(id)initwithLayer:(CCLayer *)newGameLayer;
+-(id) initwithLayer:(CCLayer*) newGameLayer;
 
 @end

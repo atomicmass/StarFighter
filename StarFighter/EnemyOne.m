@@ -12,19 +12,18 @@
 
 -(id)init {
     
-    self = [super init];
+    self = [super initWithSpriteFrameName:@"enemy1-1.png"];
     if (self) {
-        self.scale  = 0.75f;
+        self.scale  = 1.0f;
 
-        timeToTraverseWholeScreenY = 1.0f;
-        timeToTraverseWholeScreenX = 1.5f;
-        animationDelay = 1.0f/24.0f;
+        self.timeToTraverseWholeScreenY = 1.0f;
+        self.timeToTraverseWholeScreenX = 4.0f;
+        self.animationDelay = 5.0f/24.0f;
     
         NSMutableArray *anim = [[NSMutableArray alloc] init];
         [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"enemy1-1.png"]];
         [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"enemy1-2.png"]];
-//        animation = [CCAnimation animationWithFrames:anim delay:animationDelay];
-        animation = [CCAnimation animationWithSpriteFrames:anim delay:animationDelay];
+        self.animation = [CCAnimation animationWithSpriteFrames:anim delay:self.animationDelay];
     }
     
     return self;

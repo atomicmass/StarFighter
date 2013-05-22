@@ -16,6 +16,7 @@
 @property int enemyType;
 @property float frequency;
 @property float lastGenerationTime;
+@property int enemiesGenerated;
 
 -(EnemyGeneration *) initWithStartTime:(float) st EndTime:(float) et Frequency:(float) fr EnemyType:(int) en;
 

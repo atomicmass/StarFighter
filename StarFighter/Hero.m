@@ -13,7 +13,6 @@
     CCLayer *gameLayer;
     CCArray *lasers;
     CGSize windowSize;
-    int width, height;
     float timeToTraverseWholeScreenY, animationDelay, correctionTime, laserTime;
     int correctionDistance;
     int homeX, homeY;
@@ -30,13 +29,12 @@
 
 - (id)initwithLayer:(CCLayer *)newGameLayer
 {
-    self = [super init];
+    self = [super initWithSpriteFrameName:@"fighter4.png"];
     if (self) {
         self.scale  = 0.75f;
-        width = height = (64.0f * 0.75f);
         windowSize = [[CCDirector sharedDirector] winSize];
         
-        timeToTraverseWholeScreenY = 1.0f;
+        timeToTraverseWholeScreenY = 2.5f;
         animationDelay = 1.0f/24.0f;
         correctionDistance = 10;
         correctionTime = 0.25f;
@@ -46,11 +44,11 @@
         gyroSensitivity = 0.15;
         maxGyro = 0.5;
         
-        maxY = windowSize.height - height/2;
-        minY = height/2;
+        maxY = windowSize.height - self.height/2;
+        minY = self.height/2;
         
         homeY = windowSize.height / 2;
-        homeX = width/2 + 40;
+        homeX = [self width]/2 + 40;
         
         self.position = ccp(homeX, homeY);
         
@@ -63,12 +61,11 @@
         lasers = [[CCArray alloc] init];
         for (int i = 0; i <= 20; i++)
         {
-            CCSprite *s = [[CCSprite node] initWithSpriteFrameName:@"laser.png"];
+            Sprite *s = [[Sprite node] initWithSpriteFrameName:@"laser.png"];
             [lasers addObject:s];
             s.position = ccp(windowSize.width + 20, -20);
             [gameLayer addChild:s];
         }
-        
         [self waggle];
     }
     
@@ -96,47 +93,37 @@
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter3.png"]];
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter2.png"]];
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter1.png"]];
-    CCAnimation *a = [CCAnimation animationWithFrames:anim delay:animationDelay];
-    return a;
+    return [CCAnimation animationWithSpriteFrames:anim delay:animationDelay];
 }
 
 -(CCAnimation *)getCorrectUp
 {
     NSMutableArray *anim = [[NSMutableArray alloc] init];
-    
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter1.png"]];
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter2.png"]];
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter3.png"]];
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter4.png"]];
-    
-    CCAnimation *a = [CCAnimation animationWithFrames:anim delay:animationDelay];
-    return a;
+    return [CCAnimation animationWithSpriteFrames:anim delay:animationDelay];
 }
 
 -(CCAnimation *)getTurnDown
 {
     NSMutableArray *anim = [[NSMutableArray alloc] init];
-    
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter4.png"]];
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter5.png"]];
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter6.png"]];
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter7.png"]];
-    
-    CCAnimation *a = [CCAnimation animationWithFrames:anim delay:animationDelay];
-    return a;
+    return [CCAnimation animationWithSpriteFrames:anim delay:animationDelay];
 }
 
 -(CCAnimation *)getCorrectDown
 {
     NSMutableArray *anim = [[NSMutableArray alloc] init];
-    
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter7.png"]];
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter6.png"]];
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter5.png"]];
     [anim addObject:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"fighter4.png"]];
-    
-    CCAnimation *a = [CCAnimation animationWithFrames:anim delay:1.0f/24.0f];
-    return a;
+    return [CCAnimation animationWithSpriteFrames:anim delay:animationDelay];
 }
 
 -(void) beginTurn {
@@ -200,8 +187,8 @@
     [self runAction:m];
 }
 
--(CCSprite *)getFreeLaser {
-    for (CCSprite *s in lasers) {
+-(Sprite *)getFreeLaser {
+    for (Sprite *s in lasers) {
         if(s.position.x == windowSize.width + 20) {
             return s;
         }
@@ -218,13 +205,13 @@
     fireOneCount = fireOneCountLimit;
     int endX = windowSize.width + 20 - self.position.x;
     
-    CCSprite *l1 = [self getFreeLaser];
+    Sprite *l1 = [self getFreeLaser];
     if(l1 != nil) {
         l1.position = ccp(self.position.x, self.position.y + 10);
         [l1 runAction:[CCMoveBy actionWithDuration:laserTime position:ccp(endX, 0)]];
     }
     
-    CCSprite *l2 = [self getFreeLaser];
+    Sprite *l2 = [self getFreeLaser];
     if(l2 != nil) {
         l2.position = ccp(self.position.x, self.position.y - 10);
         [l2 runAction:[CCMoveBy actionWithDuration:laserTime position:ccp(endX, 0)]];

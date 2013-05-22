@@ -10,6 +10,8 @@
 
 @implementation Enemy
 
+@synthesize animation, timeToTraverseWholeScreenX, timeToTraverseWholeScreenY, animationDelay;
+
 -(void)spawn {
     
 }

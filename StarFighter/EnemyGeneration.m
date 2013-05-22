@@ -10,7 +10,7 @@
 
 @implementation EnemyGeneration
 
-@synthesize startTime, endTime, enemyType, frequency, lastGenerationTime;
+@synthesize startTime, endTime, enemyType, frequency, lastGenerationTime, enemiesGenerated;
 
 -(EnemyGeneration *)initWithStartTime:(float)st EndTime:(float)et Frequency:(float)fr EnemyType:(int)en {
     self = [super init];
@@ -20,7 +20,8 @@
     self.frequency = fr;
     self.enemyType = en;
     
-    lastGenerationTime = -1;
+    self.enemiesGenerated = 0;
+    self.lastGenerationTime = -1;
     
     return self;
 }

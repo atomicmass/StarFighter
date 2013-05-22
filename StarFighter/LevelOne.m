@@ -18,7 +18,7 @@
     self.backgroundImage2 = @"bg1-2.png";
     
     self.enemyGenerator = [[NSArray alloc] initWithObjects:
-                           [[EnemyGeneration alloc] initWithStartTime:2 EndTime:10 Frequency:5 EnemyType:1],
+                           [[EnemyGeneration alloc] initWithStartTime:1 EndTime:100 Frequency:3 EnemyType:1],
                            nil];
     
     return self;

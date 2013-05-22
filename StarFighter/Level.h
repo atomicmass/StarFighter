@@ -17,6 +17,6 @@
 @property (strong) NSArray *enemyGenerator;
 
 -(Level *) init;
--(Enemy *) generateEnemy:(float) time;
+-(Enemy *) generateEnemyAtTime:(float) time;
 
 @end

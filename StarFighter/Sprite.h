@@ -10,4 +10,7 @@
 
 @interface Sprite : CCSprite
 
+-(float) width;
+-(float) height;
+
 @end
